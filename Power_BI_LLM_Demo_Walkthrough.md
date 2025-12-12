@@ -57,18 +57,19 @@ You can view and edit M code in two ways:
 2. See the full query logic at once, edit, then click **Done**
 
 #### Step 1.3: Simple M Code Example
-\`\`\`m
+
+```m
 let
-   Source = Excel.Workbook(File.Contents("C:\\Data\\sales.xlsx"), null, true),
+   Source = Excel.Workbook(File.Contents("C:\Data\sales.xlsx"), null, true),
    SalesData = Source{[Item="SalesTable"]}[Data],
    #"Changed Type" = Table.TransformColumnTypes(SalesData,{{"Date", type date}, {"Amount", Int64.Type}}),
    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [Amount] > 1000)
 in
    #"Filtered Rows"
-\`\`\`
+```
 
 **Why this matters:**
-- \`let ... in\` wraps all steps; \`Source\` is your connection; each step transforms the table; \`in\` returns the final result.
+- `let ... in` wraps all steps; `Source` is your connection; each step transforms the table; `in` returns the final result.
 
 ### Why Use M Code + LLM?
 - **Precision:** Describe complex transforms more clearly than clicking UI steps
@@ -80,7 +81,8 @@ in
 ### Use Case 1: Data Cleaning & Transformation
 
 #### Prompt 1.1: Clean Messy CSV Data
-\`\`\`
+
+```
 Add to this power query the following steps:
 1. Remove rows where Sales Amount is null or blank
 2. Combine First Name and Last Name into Full Name (trim spaces)
@@ -90,26 +92,28 @@ My M code is:
 
 [PASTE YOUR CURRENT M CODE HERE]
 
-The file is at: C:\\data\\sales.csv
+The file is at: C:\data\sales.csv
 
 IMPORTANT: Include the complete M code with all steps AND the final "in" statement that returns the transformed table.
-\`\`\`
+```
 
 **Expected Output:** Clean, deduplicated table with proper data types.
 
 #### Prompt 1.2: Create Status Lookup Table
-\`\`\`
+
+```
 Create an M query from a blank query that has:
 1. A Status column with values: completed, pending, cancelled
 2. An OrderBy column with values: 1, 2, 3 (respectively)
 
 The result should be a two-column table that can be used for sorting or filtering other queries.
-\`\`\`
+```
 
 **Expected Output:** A small lookup table with Status names and their sort order.
 
 #### Prompt 1.3: Add Descriptive Names to Applied Steps
-\`\`\`
+
+```
 I have this M code that loads CSV data and applies multiple transformations. The step names are auto-generated 
 (like #"Promoted Headers", #"Filtered Rows1", etc.) and make the code hard to read and maintain.
 
@@ -118,8 +122,8 @@ Please rewrite this M code to:
 2. Add a comment above each step explaining its purpose
 3. Keep the same logic and transformations - only improve naming and add comments
 
-Include the complete code from \`let\` to \`in\`.
-\`\`\`
+Include the complete code from let to in.
+```
 
 **Expected Output:** Refactored M code with readable step names and explanatory comments.
 
@@ -143,9 +147,10 @@ DAX (Data Analysis Expressions) is the formula language for Power BI calculation
 2. Click **New Measure** or **New Column**
 
 #### Step 2.2: Simple DAX Example
-\`\`\`dax
+
+```dax
 Total Sales = SUM('Sales Gemini'[Sales Amount])
-\`\`\`
+```
 
 #### Step 2.3: Create the Measure in Power BI
 1. In **Modeling** tab, click **New Measure**
@@ -157,7 +162,8 @@ Total Sales = SUM('Sales Gemini'[Sales Amount])
 If your DAX isn't working:
 
 **Prompt to LLM:**
-\`\`\`
+
+```
 This DAX measure isn't working correctly:
 [PASTE YOUR DAX CODE]
 
@@ -167,12 +173,13 @@ These are my tables:
 - [LIST TABLE NAMES & KEY COLUMNS]
 
 Can you help fix it?
-\`\`\`
+```
 
 ### Use Case 1: DAX Calendar Table
 
 #### Prompt 1.1: Create a Basic Calendar Table
-\`\`\`
+
+```
 Write a DAX calculated table for a basic Calendar table for Power BI.
 
 The table should:
@@ -181,14 +188,15 @@ The table should:
 3. Use simple date functions, no complex logic
 
 Provide just the DAX code that I can paste into a new table.
-\`\`\`
+```
 
 **Sample Output:** A Calendar table with ~2,200 rows spanning 2020-2025, ready to use as a dimension for connecting to fact tables.
 
 ### Use Case 2: Time-Based Calculations
 
 #### Prompt 2.1: Year-over-Year & Month-over-Month Growth
-\`\`\`
+
+```
 Write DAX measures in Power BI for:
 
 1. YoY Growth % - Compares current year sales to previous year
@@ -197,27 +205,29 @@ Write DAX measures in Power BI for:
 Tables:
 - Sales Gemini (Date, Sales Amount, Region, Product)
 - Calendar (Date, Month, Month Number, Quarter, Year, Year-Month)
-\`\`\`
+```
 
 ### Use Case 3: Ranking & Segmentation
 
 #### Prompt 3.1: Top N Ranking with Ties
-\`\`\`
+
+```
 Write DAX measures for ranking and segmentation:
 1. Rank by Sales - Rank regions by total sales
 2. Percentile Rank - Show percentile ranking
 3. Segment - Categorize as "Top Performer", "Mid-Tier", "Low Performer"
-\`\`\`
+```
 
 ### Use Case 4: Complex Business Logic
 
 #### Prompt 4.1: Customer Lifetime Value (CLV) & Churn
-\`\`\`
+
+```
 Write DAX measures for customer analytics:
 1. Total Customer Revenue - Sum of all purchases by customer
 2. Purchase Frequency - Count of orders per customer
 3. Average Order Value - Total Revenue / Order Count
-\`\`\`
+```
 
 ---
 
@@ -232,10 +242,11 @@ Themes are JSON files that control the visual appearance of Power BI reports (co
 1. In Power BI Desktop, go to **View** tab → **Themes**
 2. Select **Innovate** theme from the gallery
 3. Go to **View → Themes → Customize current theme → Export current theme**
-4. Save the JSON file as \`Innovate_Original.json\` in your Demo folder
+4. Save the JSON file as `Innovate_Original.json` in your Demo folder
 
 #### Step 3.2: Inspect the Theme JSON
-\`\`\`json
+
+```json
 {
   "name": "Innovate",
   "dataColors": [
@@ -252,12 +263,12 @@ Themes are JSON files that control the visual appearance of Power BI reports (co
   },
   "tableAccent": "#118DFF"
 }
-\`\`\`
+```
 
 #### Step 3.3: Modify Theme with LLM
 
 **Workflow:**
-1. Copy the entire JSON content from \`Innovate_Original.json\`
+1. Copy the entire JSON content from `Innovate_Original.json`
 2. Paste it into M365 Copilot with your modification prompt
 3. Save the LLM's response as a new JSON file
 4. Import it back into Power BI to see the changes
@@ -265,18 +276,20 @@ Themes are JSON files that control the visual appearance of Power BI reports (co
 **Example Modification 1: Change All Fonts**
 
 **Prompt to M365 Copilot:**
-\`\`\`
+
+```
 Change all font references in this Power BI theme JSON to "Times New Roman".
 
 [PASTE THE JSON HERE]
 
 Return the complete updated JSON.
-\`\`\`
+```
 
 ### Use Case 1: Iterative Theme Refinement
 
 #### Prompt 1.1: DoD Compliance Dark Theme
-\`\`\`
+
+```
 Generate a Power BI theme JSON for a DoD environment that:
 1. Uses a dark background for accessibility
 2. Military blue (#003A70) as primary color
@@ -285,7 +298,7 @@ Generate a Power BI theme JSON for a DoD environment that:
 5. 6 distinct data colors for multiple series
 6. Accessible color palette (WCAG AAA standards)
 7. Color-blind friendly (avoid red-green only)
-\`\`\`
+```
 
 ---
 
@@ -301,7 +314,8 @@ Demo environments, testing, and development often need realistic sample data wit
 #### Step 4.2: Use Case 1 - Sales & Revenue Data
 
 ##### Prompt 1.1: Basic Sales Dataset
-\`\`\`
+
+```
 Generate sample sales data for testing a Power BI report.
 
 Requirements:
@@ -310,14 +324,14 @@ Requirements:
 3. Date range: January 1, 2024 to December 31, 2024
 4. Regions: North, South, East, West
 5. Format as CSV with headers
-\`\`\`
+```
 
 ---
 
 ## Demo 5: Power BI as Code (PBIP)
 
 **What is PBIP?**  
-PBIP (Power BI Project) stores Power BI files as folders with source files instead of a single \`.pbix\` binary. This enables:
+PBIP (Power BI Project) stores Power BI files as folders with source files instead of a single `.pbix` binary. This enables:
 - Git version control
 - Code-level diffing
 - Team collaboration
@@ -353,29 +367,29 @@ Once you understand M code, DAX, and Themes, PBIP lets you:
 1. Right-click the **MyFirstPBIP** folder
 2. Select **"Open with Code"** (if VS Code is installed)
 3. Browse the folder structure in the Explorer pane
-4. Open \`definition.pbir\` or \`definition.pbdm\` to see JSON/TMDL code
+4. Open `definition.pbir` or `definition.pbdm` to see JSON/TMDL code
 
 **Option 2: Any Text Editor**
 1. Navigate to the PBIP folder in File Explorer
-2. Right-click \`definition.pbir\` → Open With → Notepad
+2. Right-click `definition.pbir` → Open With → Notepad
 3. You'll see the JSON structure of your report
 
 #### Step 5.5: Add DAX Measures Directly in the IDE
 
 **Option 1: Edit model.bim or definition.pbdm**
 
-1. In VS Code, navigate to the \`.Dataset\` folder
-2. Open \`model.bim\` (or \`definition.pbdm\` depending on format)
+1. In VS Code, navigate to the `.Dataset` folder
+2. Open `model.bim` (or `definition.pbdm` depending on format)
 3. Find the table where you want to add a measure
-4. Locate the \`"measures"\` array within that table
+4. Locate the `"measures"` array within that table
 5. Add your new measure to the array
 
 #### Step 5.6: Save and Reload in Power BI
 
-1. Save the \`model.bim\` file in your text editor (Ctrl+S)
+1. Save the `model.bim` file in your text editor (Ctrl+S)
 2. Go back to Power BI Desktop
-3. Close the \`.pbip\` file (if open)
-4. Reopen the \`.pbip\` file from File Explorer
+3. Close the `.pbip` file (if open)
+4. Reopen the `.pbip` file from File Explorer
 5. Your new measures appear in the Fields pane!
 
 ### Use the LLM to Modify PBIP Files
@@ -385,9 +399,10 @@ Once you understand M code, DAX, and Themes, PBIP lets you:
 **Use Case:** Let GitHub Copilot analyze your data model and automatically create relevant measures.
 
 **Prompt to GitHub Copilot (in VS Code chat):**
-\`\`\`
+
+```
 Look at the tables and add 5 new relevant measures. Include in the name of the measures that they were made by GHCP
-\`\`\`
+```
 
 **What GitHub Copilot Does:**
 1. Analyzes your existing table structure (columns, relationships)
@@ -398,11 +413,11 @@ Look at the tables and add 5 new relevant measures. Include in the name of the m
 
 **Example Output:**
 GitHub Copilot will add measures like:
-- \`[GHCP] YoY Growth %\` - Year-over-year growth percentage
-- \`[GHCP] Running Total Sales\` - Cumulative sales over time
-- \`[GHCP] Total Transactions\` - Count of all transactions
-- \`[GHCP] Average Transaction Value\` - Average per transaction
-- \`[GHCP] Sales per Weekday\` - Weekday-only averages
+- `[GHCP] YoY Growth %` - Year-over-year growth percentage
+- `[GHCP] Running Total Sales` - Cumulative sales over time
+- `[GHCP] Total Transactions` - Count of all transactions
+- `[GHCP] Average Transaction Value` - Average per transaction
+- `[GHCP] Sales per Weekday` - Weekday-only averages
 
 **Why This Is Powerful:**
 - Copilot understands your model context
@@ -438,7 +453,7 @@ GitHub Copilot will add measures like:
 |-------|----------|
 | M code gives "unknown identifier" error | Check table/column names match your data source exactly |
 | DAX measure returns BLANK | Use error checking; ask LLM to add IFERROR() wrapper |
-| PBIP file won't open | Ensure \`.pbiworkspace\` file exists; try re-opening the folder |
+| PBIP file won't open | Ensure `.pbiworkspace` file exists; try re-opening the folder |
 
 ---
 
